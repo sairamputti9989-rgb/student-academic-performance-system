@@ -1,40 +1,38 @@
+require("dotenv").config();
+
 const { Pool } = require("pg");
 
-
-// =====================================================
-// POSTGRESQL DATABASE CONNECTION
-// =====================================================
+console.log("DB CONFIG CHECK:");
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_NAME:", process.env.DB_NAME);
+console.log("DB_PORT:", process.env.DB_PORT);
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD ? "SET" : "NOT SET");
 
 const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "student_academic_db",
-    password: "12345",
-    port: 5432
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: Number(process.env.DB_PORT) || 5432,
+
+    ssl: {
+        rejectUnauthorized: false
+    },
+
+    connectionTimeoutMillis: 10000
 });
-
-
-// =====================================================
-// TEST DATABASE CONNECTION
-// =====================================================
 
 pool.connect()
     .then((client) => {
         console.log("PostgreSQL connected successfully");
-
-        // Release the test connection
         client.release();
     })
     .catch((error) => {
-        console.log(
-            "Database connection error:",
-            error.message
-        );
+        console.error("DATABASE CONNECTION ERROR");
+        console.error("Message:", error.message);
+        console.error("Code:", error.code);
+        console.error("Full error:", error);
     });
-
-
-// =====================================================
-// EXPORT DATABASE CONNECTION
-// =====================================================
 
 module.exports = pool;

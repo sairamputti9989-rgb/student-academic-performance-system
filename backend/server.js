@@ -7,10 +7,6 @@ const db = require("./db");
 
 const app = express();
 
-// =====================================================
-// PORT
-// =====================================================
-
 const PORT = process.env.PORT || 5001;
 
 // =====================================================
@@ -39,16 +35,16 @@ app.get("/api/test-db", async (req, res) => {
         const result = await db.query("SELECT NOW()");
 
         res.json({
-            message: "PostgreSQL connected successfully",
+            message: "Database connected successfully",
             time: result.rows[0].now
         });
 
     } catch (error) {
-        console.error("Database test error:", error);
+        console.error("DATABASE TEST ERROR:", error);
 
         res.status(500).json({
             message: "Database connection failed",
-            error: error.message
+            error: error.message || String(error)
         });
     }
 });
@@ -642,10 +638,6 @@ app.get("/api/performance/:studentId", async (req, res) => {
     try {
         const { studentId } = req.params;
 
-        // -----------------------------------------
-        // CHECK STUDENT
-        // -----------------------------------------
-
         const studentResult = await db.query(
             `
             SELECT
@@ -666,10 +658,6 @@ app.get("/api/performance/:studentId", async (req, res) => {
         }
 
         const student = studentResult.rows[0];
-
-        // -----------------------------------------
-        // GET PERFORMANCE
-        // -----------------------------------------
 
         const result = await db.query(
             `
