@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
-const API = "http://localhost:5001/api";
+const API = "https://student-academic-backend-5dgn.onrender.com/api";
 
 /* =========================================
    GRADE FUNCTION
